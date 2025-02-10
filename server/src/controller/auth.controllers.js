@@ -57,7 +57,7 @@ exports.signin = async (req, res) => {
         if(!isPasswordCorrect){
          return   res.json({data:"invalid password"})
         }
-        Token.generateToken({id:user._id,res})
+        Token.generateToken({id:user._id},res)
         res.json({
             password:user.password,
             email:user.email
@@ -71,9 +71,11 @@ exports.signin = async (req, res) => {
 
 exports.signout = async (req, res) => {
     try {
-
+        res.cookie("jwt","",{maxAge:0})
+        res.status(200).json({logout :"logout sucessfully"})
     }
-    catch {
-
+    
+    catch(error) {
+        res.json({error:error.message})
     }
 }
