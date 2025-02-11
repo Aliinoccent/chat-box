@@ -1,6 +1,7 @@
 const { User } = require('../modals/user.model')
 const bcrypt = require("bcryptjs");
-const Token = require('../lib/util.jwt')
+const Token = require('../lib/util.jwt');
+const cloudinary  = require('../lib/cloudinary');
 
 exports.signup = async (req, res) => {
     const { email, password, fullName } = req.body;
@@ -78,4 +79,29 @@ exports.signout = async (req, res) => {
     catch(error) {
         res.json({error:error.message})
     }
+}
+
+exports.updateProfile=async(req,res)=>{
+    try{
+        const {image}=req.body;
+        if(!image){
+            res.status(400).json({message:"image not uploaded"});
+        }
+        const userId=req.user._id;
+        if(!userId){
+            res.status(400).json({message:"user id not found"});
+        }
+        const picResponse= await cloudinary.uploader.upload(image)
+        const user=await User.findByIdAndUpdate(userId,{profilePic:picResponse.secure_url},{new:true});
+        res.status(200).json({messege:"pic uploaded successfully",user})
+    }
+    catch(error){
+        console.log("pic not updated");
+        return res.status(500).json({messege:"server side error upload profile"})
+    }
+}
+
+exports.check=async (req,res)=>{
+    console.log(req.user.fullName);
+    res.status(200).json({messege:req.user})
 }

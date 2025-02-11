@@ -7,7 +7,6 @@ const SocketIo = require('socket.io')
 const cookieParser=require('cookie-parser')
 require('dotenv').config();
 const Db=require('./configer/db');
-
 app.use(cookieParser());
 app.use(express.json())
 const server = http.createServer(app);
