@@ -11,8 +11,10 @@ app.use(cookieParser());
 app.use(express.json())
 const server = http.createServer(app);
 const authRouters=require('./Router/auth.router')
+const messeges=require('./Router/messege.router')
 
 app.use ('/api/auth',authRouters)
+app.use('/api/messeges',messeges)
 
 
 
