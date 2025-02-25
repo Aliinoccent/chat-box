@@ -3,9 +3,10 @@ const { User } = require("../modals/user.model")
 exports.protectRoute = async (req, res, next) => {
     const token = req.cookies.jwt;
 
-    console.log(token);
+  
     if (!token) {
-        return res.status(400).json({ messege: "anotuhrized invalid token" })
+        console.log('token',token);
+        return res.status(401).json({ messege: "anotuhrized invalid token" })
     }
     const decode = jwt.verify(token, process.env.Secrat_key);
     if (!decode) {

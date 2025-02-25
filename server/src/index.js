@@ -9,6 +9,10 @@ require('dotenv').config();
 const Db=require('./configer/db');
 app.use(cookieParser());
 app.use(express.json())
+app.use(cors({
+    origin:"http://localhost:5173",
+    credentials:true 
+}))
 const server = http.createServer(app);
 const authRouters=require('./Router/auth.router')
 const messeges=require('./Router/messege.router')
