@@ -8,6 +8,7 @@ exports.signup = async (req, res) => {
 
     try {
         if (!email || !password || !fullName) {
+            console.log(email,password,fullName);
             res.json({ data: "all filed are required" });
         }
         if (password.length < 6) {

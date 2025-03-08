@@ -7,6 +7,7 @@ import SetteingPage from "./pages/setteingPage";
 import ProfilePage from "./pages/profilePage";
 import Store from "./store/store";
 import {Loader} from 'lucide-react'
+import {Toaster} from 'react-hot-toast'
 const App = () => {
   const {checkAuth,authUser,isCheckingAuth}=Store() 
   useEffect(()=>{
@@ -29,7 +30,7 @@ const App = () => {
         <Route path="/settingPage" element={<SetteingPage/>}/>
         <Route path="/profilePage" element={authUser?<ProfilePage/>:<Navigate to={'/signIn'}/>}/>
       </Routes>
-      
+      <Toaster/>
       </BrowserRouter>
     
   );

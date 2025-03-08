@@ -1,6 +1,7 @@
 
 import {create} from "zustand"
 import { axiosInstance } from "../lib/axios"
+import {toast} from "react-hot-toast"
 
 const Store=create((set)=>({
     authUser:null,
@@ -11,6 +12,7 @@ const Store=create((set)=>({
     checkAuth:async()=>{
         try {
             const response =await axiosInstance.get('api/auth/check')
+            console.log('this is response',response)
             set({authUser:response})
         } catch (error) {
             set({authUser:null})
@@ -24,6 +26,23 @@ const Store=create((set)=>({
         }
         finally{
             set({isCheckingAuth:false})
+        }
+    },
+    signUp:async(data)=>{
+        set({isSingingup:true})
+        try {
+    
+            const res=await axiosInstance.post("api/auth/signup",data);
+            console.log('from backend',res.data)
+            set({authUser:res.data});
+          
+            toast.success("account is created successfully")
+
+        } catch (error) {
+            toast.error(error.response.data.message)
+        }
+        finally{
+            set({isSigningUp:false})
         }
     }
 }))
