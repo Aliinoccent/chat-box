@@ -44,6 +44,19 @@ const Store=create((set)=>({
         finally{
             set({isSigningUp:false})
         }
+    },
+    logout: async ()=> {
+        try {
+           const response=await axiosInstance.post('/api/auth/signout')
+           console.log('log out successfully',response);
+           toast.success("log out successful");
+           set({authUser:null})
+
+            
+        } catch (error) {
+            console.log(error);
+            toast.error(error.response.data.message)
+        }
     }
 }))
 export default Store;
