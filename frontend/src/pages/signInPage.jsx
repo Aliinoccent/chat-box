@@ -13,7 +13,8 @@ const SignInPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const success = validation();
-    if (success) {
+    if (success===true) {
+   
       login(data);
     }
   };
@@ -23,6 +24,7 @@ const SignInPage = () => {
     if (!/\S+@\S+\.\S+/.test(data.email)) return toast.error("Invalid email format");
     if (!data.password.trim()) return toast.error("Password is required");
     if (data.password.length < 6) return toast.error("Password must be at least 6 characters");
+    
     return true;
   };
 

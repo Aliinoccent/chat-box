@@ -1,5 +1,6 @@
 import { MessageSquare ,Settings,LogOut,User}  from "lucide-react"
-import { Link } from "lucide-react"
+// import { Link } from "lucide-react"
+import {Link} from "react-router-dom"
 import Store from "../store/store"
 const Navbar=()=>{
     const {authUser , logout}=Store();
@@ -31,9 +32,9 @@ return (
             <span className="hidden sm:inline">Settings</span>
           </Link>
 
-          {authUser && (
+          {authUser  && authUser.data!=='invalid password'&&(
             <>
-              <Link to={"/profile"} className={`btn btn-sm gap-2`}>
+              <Link to={"/profilePage"} className={`btn btn-sm gap-2`}>
                 <User className="size-5" />
                 <span className="hidden sm:inline">Profile</span>
               </Link>

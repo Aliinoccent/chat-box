@@ -37,7 +37,7 @@ const App = () => {
           />
           <Route
             path="/signIn"
-            element={!authUser ? <SignInPage /> : <Navigate to={"/"} />}
+            element={!authUser || authUser?.data==='invalid password'? <SignInPage /> : <Navigate to={"/"} />}
           />
           <Route path="/settingPage" element={<SetteingPage />} />
           <Route

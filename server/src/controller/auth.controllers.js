@@ -84,21 +84,21 @@ exports.signout = async (req, res) => {
 
 exports.updateProfile=async(req,res)=>{
     try{
-        const {image}=req.body;
-        if(!image){
+        const {profilePic}=req.body;
+        if(!profilePic){
             res.status(400).json({message:"image not uploaded"});
         }
         const userId=req.user._id;
         if(!userId){
             res.status(400).json({message:"user id not found"});
         }
-        const picResponse= await cloudinary.uploader.upload(image)
+        const picResponse= await cloudinary.uploader.upload(profilePic)
         const user=await User.findByIdAndUpdate(userId,{profilePic:picResponse.secure_url},{new:true});
-        res.status(200).json({messege:"pic uploaded successfully",user})
+        res.status(200).json({data:"pic uploaded successfully",user})
     }
     catch(error){
         console.log("pic not updated");
-        return res.status(500).json({messege:"server side error upload profile"})
+        return res.status(500).json({data:"server side error upload profile"})
     }
 }
 
