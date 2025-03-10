@@ -1,14 +1,14 @@
 const { User } = require('../modals/user.model')
 const bcrypt = require("bcryptjs");
 const Token = require('../lib/util.jwt');
-const cloudinary  = require('../lib/cloudinary');
+const cloudinary = require('../lib/cloudinary');
 
 exports.signup = async (req, res) => {
     const { email, password, fullName } = req.body;
 
     try {
         if (!email || !password || !fullName) {
-            console.log(email,password,fullName);
+            console.log(email, password, fullName);
             res.json({ data: "all filed are required" });
         }
         if (password.length < 6) {
@@ -56,13 +56,15 @@ exports.signin = async (req, res) => {
             return res.status(400).json({ data: "invalid caridantial" })
         }
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
-        if(!isPasswordCorrect){
-         return   res.json({data:"invalid password"})
+        if (!isPasswordCorrect) {
+            return res.json({ data: "invalid password" })
         }
-        Token.generateToken({id:user._id},res)
+        Token.generateToken({ id: user._id }, res)
         res.json({
-            password:user.password,
-            email:user.email
+            _id: user._id,
+            fullName: user.fullName,
+            email: user.email,
+            profilePic: user.profilePic,
         })
 
     }
@@ -73,36 +75,36 @@ exports.signin = async (req, res) => {
 
 exports.signout = async (req, res) => {
     try {
-        res.cookie("jwt","",{maxAge:0})
-        res.status(200).json({logout :"logout sucessfully"})
+        res.cookie("jwt", "", { maxAge: 0 })
+        res.status(200).json({ logout: "logout sucessfully" })
     }
-    
-    catch(error) {
-        res.json({error:error.message})
+
+    catch (error) {
+        res.json({ error: error.message })
     }
 }
 
-exports.updateProfile=async(req,res)=>{
-    try{
-        const {profilePic}=req.body;
-        if(!profilePic){
-            res.status(400).json({message:"image not uploaded"});
+exports.updateProfile = async (req, res) => {
+    try {
+        const { profilePic } = req.body;
+        if (!profilePic) {
+            res.status(400).json({ message: "image not uploaded" });
         }
-        const userId=req.user._id;
-        if(!userId){
-            res.status(400).json({message:"user id not found"});
+        const userId = req.user._id;
+        if (!userId) {
+            return res.status(400).json({ message: "user id not found" });
         }
-        const picResponse= await cloudinary.uploader.upload(profilePic)
-        const user=await User.findByIdAndUpdate(userId,{profilePic:picResponse.secure_url},{new:true});
-        res.status(200).json({data:"pic uploaded successfully",user})
+        const picResponse = await cloudinary.uploader.upload(profilePic)
+        const user = await User.findByIdAndUpdate(userId, { profilePic: picResponse.secure_url }, { new: true });
+        res.status(200).json(user)
     }
-    catch(error){
+    catch (error) {
         console.log("pic not updated");
-        return res.status(500).json({data:"server side error upload profile"})
+        return res.status(500).json({ data: "server side error upload profile" })
     }
 }
 
-exports.check=async (req,res)=>{
-    console.log(req.user.fullName);
-    res.status(200).json({messege:req.user})
+exports.check = async (req, res) => {
+    console.log(req.user)
+    res.status(200).json(req.user);
 }

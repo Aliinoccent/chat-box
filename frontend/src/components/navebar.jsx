@@ -22,7 +22,7 @@ return (
 
         <div className="flex items-center gap-2">
           <Link
-            to={"/settings"}
+            to={"/settingPage"}
             className={`
             btn btn-sm gap-2 transition-colors
             
