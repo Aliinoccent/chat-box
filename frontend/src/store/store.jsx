@@ -9,6 +9,7 @@ const Store=create((set)=>({
     isSigningUp:false,
     isSingingin:false,
     isUpdatingProfile:false,
+    onlineUsers: [],
     checkAuth:async()=>{
         try {
             const response =await axiosInstance.get('api/auth/check')

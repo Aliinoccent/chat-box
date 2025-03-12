@@ -7,7 +7,7 @@ users:[],
 selectedUser:null,
 isUserLoading:false,
 isMessegesLoading:false,
-getUser:async()=>{
+getUsers:async()=>{
     set({isUserLoading:true})
     try {
         const res=await axiosInstance.get("api/messeges/user");
