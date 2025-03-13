@@ -1,38 +1,42 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { UseChat } from "../store/useChatStore";
-import { X, Image, Send } from "lucide-react";
-function MessageInput() {
+import { Image, Send, X } from "lucide-react";
+import toast from "react-hot-toast";
+
+const MessageInput = () => {
   const [text, setText] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
   const fileInputRef = useRef(null);
   const { sendMessage } = UseChat();
 
   const handleImageChange = (e) => {
-    const file =e.target.files[0];
-    if(!file.type.startsWith("image/")){
-      toast.error("please select an image file");
+    const file = e.target.files[0];
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
       return;
     }
 
-    const reader=new FileReader();
-    reader.onloadend=()=>{
+    const reader = new FileReader();
+    reader.onloadend = () => {
       setImagePreview(reader.result);
-    }
-    reader.readAsDataURL(file); 
+    };
+    reader.readAsDataURL(file);
   };
+
   const removeImage = () => {
-    setImagePreview(null )
-    if(fileInputRef.current) fileInputRef.current.value="";
+    setImagePreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if(!text.trim() && !imagePreview) return
-
+    if (!text.trim() && !imagePreview) return;
     try {
-      await sendMessage({
+      const data=await sendMessage({
         text: text.trim(),
         image: imagePreview,
       });
+      console.log('messages component ',data);
 
       // Clear form
       setText("");
@@ -42,6 +46,7 @@ function MessageInput() {
       console.error("Failed to send message:", error);
     }
   };
+
   return (
     <div className="p-4 w-full">
       {imagePreview && (
@@ -63,7 +68,8 @@ function MessageInput() {
           </div>
         </div>
       )}
-      <from onSubmit={handleSendMessage} className="flex items-center  gap-2">
+
+      <form onSubmit={handleSendMessage} className="flex items-center gap-2">
         <div className="flex-1 flex gap-2">
           <input
             type="text"
@@ -72,7 +78,6 @@ function MessageInput() {
             value={text}
             onChange={(e) => setText(e.target.value)}
           />
-
           <input
             type="file"
             accept="image/*"
@@ -97,9 +102,8 @@ function MessageInput() {
         >
           <Send size={22} />
         </button>
-      </from>
+      </form>
     </div>
   );
-}
-
+};
 export default MessageInput;

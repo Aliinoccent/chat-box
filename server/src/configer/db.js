@@ -6,7 +6,7 @@ try{
   console.log('connected db')
 
 }catch(error){
-    console.log(error);
+    console.log(error.message);
 
 }
 }

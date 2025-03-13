@@ -36,17 +36,23 @@ getMessages:async(id)=>{
     }finally{
         set({isMessegesLoading:false})
     }
+},
+
+sendMessage: async (messageData) => {
+    const { selectedUser, messages } = get();
+    try {
+      const res = await axiosInstance.post(`api/messeges/${selectedUser._id}`, messageData);
+      console.log(res.data)
+      
+      set({messages:[...messages,res.data]})
     
-},
-sendMessage:async(data)=>{
-    const {messages,selectedUser}=get();
- try {
-    const res=await axiosInstance.post(`api/messages/${selectedUser._id}`,data)
-    set({messages:[...messages,res.data]})
- } catch (error) {
-    toast.error(error.response.data.message)
- }
-},
+    console.log(messages);
+    return res.data
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  },
+
 setSelectedUser: (selectedUser) => set({ selectedUser }),
 
 })
