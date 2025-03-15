@@ -26,9 +26,7 @@ exports.messages = async (req, res) => {
             $or: [{ senderId: myId }, { reciverId: usertochatId },
             { senderId: usertochatId }, { reciverId: myId }]
         });
-        res.status(200).json({
-            message: allMessages
-        })
+        res.status(200).json(allMessages)
     }
     catch (error) {
         console.log("error in messeges controller", error.message)

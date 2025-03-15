@@ -26,9 +26,7 @@ getMessages:async(id)=>{
     set({isMessegesLoading:true})
     try {
         const res=await axiosInstance.get(`api/messeges/${id}`);
-    
         set({messages:res.data});
-
     
     } catch (error) {
         console.log("error",id,error)
@@ -39,17 +37,18 @@ getMessages:async(id)=>{
 },
 
 sendMessage: async (messageData) => {
-    const { selectedUser, messages } = get();
+    console.log(messageData);
+    const { selectedUser,messages } = get();
     try {
-      const res = await axiosInstance.post(`api/messeges/${selectedUser._id}`, messageData);
-      console.log(res.data)
-      
-      set({messages:[...messages,res.data]})
+      const res = await axiosInstance.post(`api/messeges/${selectedUser._id}`, messageData);  
+      console.log('messages',messages);  
+      console.log('res',res.data)
+    //   set({ messages: { ...messages, message: [...messages.message, res.data] } });
+        set({messages:[...messages,res.data]})
     
-    console.log(messages);
     return res.data
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error);
     }
   },
 

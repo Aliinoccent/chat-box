@@ -32,11 +32,11 @@ const MessageInput = () => {
     e.preventDefault();
     if (!text.trim() && !imagePreview) return;
     try {
-      const data=await sendMessage({
+      await sendMessage({
         text: text.trim(),
         image: imagePreview,
       });
-      console.log('messages component ',data);
+     
 
       // Clear form
       setText("");
