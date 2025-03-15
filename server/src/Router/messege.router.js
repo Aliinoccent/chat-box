@@ -5,6 +5,6 @@ const { protectRoute } = require('../middleware/auth.middleware');
 const { getAllUserSideBar,messages,sendMessage } = messegeController;
 router.get('/user',protectRoute ,getAllUserSideBar);
 router.get('/:id',protectRoute,messages);
-router.post('/:id',protectRoute,sendMessage)
+router.post('/:id',protectRoute,sendMessage);
 
 module.exports=(router);

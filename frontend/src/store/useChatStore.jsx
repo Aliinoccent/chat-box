@@ -37,18 +37,16 @@ getMessages:async(id)=>{
 },
 
 sendMessage: async (messageData) => {
-    console.log(messageData);
     const { selectedUser,messages } = get();
     try {
       const res = await axiosInstance.post(`api/messeges/${selectedUser._id}`, messageData);  
-      console.log('messages',messages);  
-      console.log('res',res.data)
     //   set({ messages: { ...messages, message: [...messages.message, res.data] } });
         set({messages:[...messages,res.data]})
     
     return res.data
     } catch (error) {
-      toast.error(error);
+        console.log(error)
+      toast.error(error.response.data.message);
     }
   },
 

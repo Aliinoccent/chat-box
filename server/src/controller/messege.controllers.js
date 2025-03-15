@@ -1,6 +1,6 @@
 const { User } = require("../modals/user.model");
 const { Messages } = require('../modals/messege.model');
-const { cloudinary } = require('../lib/cloudinary')
+const  cloudinary  = require('../lib/cloudinary')
 
 
 exports.getAllUserSideBar = async (req, res) => {
@@ -42,6 +42,7 @@ exports.sendMessage = async (req, res) => {
         if (image) {
             const picResponse = await cloudinary.uploader.upload(image);
             imageUrl = picResponse.secure_url;
+            console.log('imageUrl',imageUrl)
         }
         const newMessage = new Messages({ senderId: myid, reciverId, text, image: imageUrl })
         await newMessage.save();
