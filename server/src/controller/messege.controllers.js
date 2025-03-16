@@ -8,7 +8,6 @@ exports.getAllUserSideBar = async (req, res) => {
         const user = req.user._id;
 
         const allUserExceptItself = await User.find({ _id: { $ne: user } });
-        console.log(allUserExceptItself, "all user ");
         res.status(200).json(allUserExceptItself)
 
     }

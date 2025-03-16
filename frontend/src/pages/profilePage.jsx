@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Store from "../store/store";
+import avator from "../../public/avatar.png"
 import { Camera, Mail, User } from "lucide-react";
 
 const ProfilePage = () => {
@@ -20,6 +21,8 @@ const ProfilePage = () => {
       await updateProfile({ profilePic: base64Image });
     };
   };
+ 
+  console.log('authUser',authUser)
 
   return (
     <div className="h-screen pt-20">
@@ -35,7 +38,7 @@ const ProfilePage = () => {
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <img
-                src={selectedImg || authUser.profilePic || "/avatar.png"}
+                src={selectedImg || authUser.data.profilePic || "/avatar.png"}
                 alt="Profile"
                 className="size-32 rounded-full bg-white object-cover border-4 "
               />
@@ -71,7 +74,7 @@ const ProfilePage = () => {
                 <User className="w-4 h-4" />
                 Full Name
               </div>
-              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{authUser?.fullName}</p>
+              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{authUser.data?.fullName}</p>
             </div>
 
             <div className="space-y-1.5">
@@ -79,7 +82,7 @@ const ProfilePage = () => {
                 <Mail className="w-4 h-4" />
                 Email Address
               </div>
-              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{authUser?.email}</p>
+              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{authUser.data?.email}</p>
             </div>
           </div>
 

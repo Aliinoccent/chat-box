@@ -2,19 +2,23 @@
 import {create} from "zustand"
 import { axiosInstance } from "../lib/axios"
 import {toast} from "react-hot-toast"
+import {io} from "socket.io-client"
 
-const Store=create((set)=>({
+
+const Store=create((set,get)=>({
     authUser:null,
     isCheckingAuth:true,
     isSigningUp:false,
     isSingingin:false,
     isUpdatingProfile:false,
     onlineUsers: [],
+    socket:null,
     checkAuth:async()=>{
         try {
             const response =await axiosInstance.get('api/auth/check')
             console.log('this is response',response)
             set({authUser:response})
+            get().Socketconnected();
         } catch (error) {
             set({authUser:null})
             console.log("errror in auth function",error)
@@ -36,7 +40,7 @@ const Store=create((set)=>({
             const res=await axiosInstance.post("api/auth/signup",data);
             console.log('from backend',res.data)
             set({authUser:res.data});
-          
+          get().Socketconnected();
             toast.success("account is created successfully")
 
         } catch (error) {
@@ -52,7 +56,8 @@ const Store=create((set)=>({
         try {
            const res=await axiosInstance.post('/api/auth/signin',data);
             set ({authUser:res.data});
-            toast.success(res.data.data);
+            toast.success(res);
+            get().Socketconnected();
         } catch (error) {
             toast.error(error.response.data.message);
         }
@@ -65,6 +70,7 @@ const Store=create((set)=>({
            const response=await axiosInstance.post('/api/auth/signout')
            console.log('log out successfully',response);
            toast.success("log out successful");
+           get().disconnected();
            set({authUser:null})
 
             
@@ -87,5 +93,15 @@ const Store=create((set)=>({
           set({ isUpdatingProfile: false });
         }
       },
+      Socketconnected:()=>{
+        const {authUser}=get();
+        const socket=io('http://localhost:5005/');
+        if(!authUser || socket?.connected) return;
+        socket.connect();
+        set({socket:socket})
+      },
+      disconnected:()=>{
+        if(get().socket?.connected) get().socket.disconnect();
+      }
 }))
 export default Store;

@@ -96,7 +96,8 @@ exports.updateProfile = async (req, res) => {
         }
         const picResponse = await cloudinary.uploader.upload(profilePic)
         const user = await User.findByIdAndUpdate(userId, { profilePic: picResponse.secure_url }, { new: true });
-        res.status(200).json(user)
+        res.status(200).json({data:user})
+       
     }
     catch (error) {
         console.log("pic not updated");
