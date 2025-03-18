@@ -1,6 +1,8 @@
 const { User } = require("../modals/user.model");
 const { Messages } = require('../modals/messege.model');
-const  cloudinary  = require('../lib/cloudinary')
+const  cloudinary  = require('../lib/cloudinary');
+const { getReceiverSocketId, io } = require("../lib/socket.io");
+
 
 
 exports.getAllUserSideBar = async (req, res) => {
@@ -45,6 +47,12 @@ exports.sendMessage = async (req, res) => {
         }
         const newMessage = new Messages({ senderId: myid, reciverId, text, image: imageUrl })
         await newMessage.save();
+
+        const receiverSocketId = getReceiverSocketId(reciverId);
+        if (receiverSocketId) {
+          io.to(receiverSocketId).emit("mes", newMessage);
+          console.log("this messege is sent to",receiverSocketId,newMessage);//this messege is sent to mDwETfHOs815DiQJAAAH
+        }
         res.status(201).json(newMessage);
     } catch (error) {
         console.log("send message error controller", error.message);

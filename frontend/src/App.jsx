@@ -11,20 +11,22 @@ import { Toaster } from "react-hot-toast";
 import Navbar from "./components/navebar";
 import { useThemeStore } from "./store/usethemestore";
 const App = () => {
-  const { checkAuth, authUser, isCheckingAuth } = Store();
+  const { checkAuth, authUser, isCheckingAuth ,onlineUsers} = Store();
   const {theme}=useThemeStore();
+  console.log('data',authUser);
+  console.log("online users in app",onlineUsers)
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
 
-  console.log({ authUser });
+  
   if (isCheckingAuth && !authUser)
     return (
       <div className="flex items-center justify-center h-screen">
         <Loader className="size-10 animate-spin" />
       </div>
     );
-  console.log(authUser);
+  
   return (
     <div data-theme={theme}>
       <Navbar />
@@ -39,7 +41,7 @@ const App = () => {
           />
           <Route
             path="/signIn"
-            element={!authUser || authUser?.data==='invalid password'? <SignInPage /> : <Navigate to={"/"} />}
+            element={!authUser ? <SignInPage /> : <Navigate to={"/"} />}
           />
           <Route path="/settingPage" element={<SetteingPage />} />
           <Route

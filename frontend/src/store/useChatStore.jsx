@@ -1,6 +1,8 @@
 import {create} from 'zustand';
 import toast from 'react-hot-toast';
 import { axiosInstance } from '../lib/axios';
+import Store from './store';
+import {io} from "socket.io-client"
 export const UseChat=create((set,get)=>({
 messages:[],
 users:[],
@@ -44,10 +46,34 @@ sendMessage: async (messageData) => {
         set({messages:[...messages,res.data]})
     
     return res.data
+
+
     } catch (error) {
         console.log(error)
       toast.error(error.response.data.message);
     }
+  },
+ subscribeToMessage:()=>{
+ const socket=Store.getState().socket;
+ 
+ console.log("get().socket",Store.getState().socket);
+if (!socket || !socket.connected) {
+    console.error("Socket is NOT connected!");
+    return;
+}
+else{
+    console.log("socket is connected",socket.id)
+}
+
+ socket.on("mes",(newMessages)=>{
+    console.log("newMessages this function is called",newMessages);
+    set({messages:[...get().messages,newMessages]});
+
+ })
+ }, 
+ unsubscribeFromMessages: () => {
+    const socket = Store.getState().socket;
+    socket.off("newMessages");
   },
 
 setSelectedUser: (selectedUser) => set({ selectedUser }),

@@ -16,7 +16,7 @@ const Store=create((set,get)=>({
     checkAuth:async()=>{
         try {
             const response =await axiosInstance.get('api/auth/check')
-            console.log('this is response',response)
+            // console.log('this is response',response)
             set({authUser:response})
             get().Socketconnected();
         } catch (error) {
@@ -76,7 +76,7 @@ const Store=create((set,get)=>({
             
         } catch (error) {
             console.log(error);
-            toast.error(error.response.data.message)
+            toast.error(error.response)
         }
     },
     updateProfile: async (data) => {
@@ -95,12 +95,22 @@ const Store=create((set,get)=>({
       },
       Socketconnected:()=>{
         const {authUser}=get();
-        const socket=io('http://localhost:5005/');
+        const socket=io('http://localhost:5005/',{
+          query:{
+            userId:authUser.data._id
+          }
+
+
+        });
         if(!authUser || socket?.connected) return;
         socket.connect();
         set({socket:socket})
+        socket.on("getOnlineUsers",(userIds)=>{
+          set({onlineUsers:userIds})
+        })
       },
       disconnected:()=>{
+        
         if(get().socket?.connected) get().socket.disconnect();
       }
 }))

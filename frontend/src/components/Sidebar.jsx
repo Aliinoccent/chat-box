@@ -9,17 +9,18 @@ function Sidebar() {
   const [showOnlineOnly, setShowOnlineOnly] = useState(false);
 
   const {onlineUsers}=Store();
+  // console.log("online user sidebar",onlineUsers)
   useEffect(() => {
 
     getUsers();
 
   }, []);
-console.log('this is users data',users)
+// console.log('this is users data',users)
   if (isUserLoading) return <MessageSkeleton />;
   const filteredUsers = showOnlineOnly
     ? users.filter((user) => onlineUsers.includes(user._id))
     : users;
-    console.log('this is fileter users',filteredUsers)
+    // console.log('this is fileter users',filteredUsers)
   return (
     <aside className=" w-20 lg:w-72 border-r border-base-300 h-full flex flex-col transition-all duration-200 ">
       <div>
